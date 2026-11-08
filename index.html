@@ -1,0 +1,284 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Create AI Studio</title>
+
+<style>
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #0b0d17;
+  color: white;
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+header {
+  padding: 25px 20px;
+  border-bottom: 1px solid #292c40;
+}
+
+.logo {
+  color: #9b80ff;
+  font-size: 25px;
+  font-weight: bold;
+}
+
+.tagline {
+  color: #a5a8bb;
+  margin-top: 10px;
+}
+
+main {
+  max-width: 850px;
+  margin: 55px auto;
+  padding: 20px;
+}
+
+.hero {
+  margin-bottom: 40px;
+}
+
+.hero h1 {
+  font-size: clamp(36px, 8vw, 55px);
+  margin-bottom: 15px;
+}
+
+.hero p {
+  color: #a5a8bb;
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.studio {
+  background: #191c2e;
+  border: 1px solid #343750;
+  border-radius: 20px;
+  padding: 25px;
+}
+
+h2 {
+  margin-bottom: 22px;
+}
+
+.modes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.mode {
+  border: none;
+  border-radius: 12px;
+  padding: 18px 8px;
+  background: #292d43;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.mode.active {
+  background: #8062ff;
+}
+
+label {
+  display: block;
+  margin: 20px 0 12px;
+  font-weight: bold;
+}
+
+textarea, select {
+  width: 100%;
+  padding: 17px;
+  border: 1px solid #414660;
+  border-radius: 12px;
+  background: #0e1120;
+  color: white;
+  font-size: 16px;
+  outline: none;
+}
+
+textarea {
+  height: 150px;
+  resize: vertical;
+}
+
+button.generate {
+  width: 100%;
+  margin-top: 25px;
+  padding: 20px;
+  background: #8062ff;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button.generate:active {
+  opacity: 0.8;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.status {
+  display: none;
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 10px;
+  background: #242943;
+  color: #c6c8d8;
+  line-height: 1.5;
+}
+
+.result {
+  margin-top: 25px;
+  min-height: 100px;
+  border: 1px dashed #414660;
+  border-radius: 12px;
+  padding: 20px;
+  color: #a5a8bb;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+footer {
+  text-align: center;
+  padding: 30px;
+  color: #777d95;
+  font-size: 13px;
+}
+
+@media(max-width: 480px) {
+  main {
+    margin: 25px auto;
+  }
+
+  .studio {
+    padding: 18px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">✦ CREATE AI STUDIO</div>
+  <p class="tagline">Your imagination starts here.</p>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>Bring Ideas To Life.</h1>
+    <p>Create cinematic AI images and videos from your imagination.</p>
+  </section>
+
+  <section class="studio">
+
+    <h2>Choose Your Creation</h2>
+
+    <div class="modes">
+      <button class="mode active" id="imageMode">
+        🖼️ IMAGE
+      </button>
+
+      <button class="mode" id="videoMode">
+        🎬 VIDEO
+      </button>
+    </div>
+
+    <label for="prompt">Your Prompt</label>
+
+    <textarea id="prompt"
+      placeholder="Describe your imagination here..."></textarea>
+
+    <label for="style">Visual Style</label>
+
+    <select id="style">
+      <option>Realistic Cinematic</option>
+      <option>3D Animation</option>
+      <option>Minimalist Stickman</option>
+      <option>Anime</option>
+      <option>Fantasy</option>
+      <option>Science Fiction</option>
+      <option>Documentary</option>
+    </select>
+
+    <button class="generate" id="generate">
+      ✨ GENERATE
+    </button>
+
+    <div class="status" id="status"></div>
+
+    <div class="result" id="result">
+      Your creations will appear here.
+    </div>
+
+  </section>
+
+</main>
+
+<footer>
+  © 2026 CREATE AI STUDIO. All rights reserved.
+</footer>
+
+<script>
+let selectedMode = "image";
+
+const imageMode = document.getElementById("imageMode");
+const videoMode = document.getElementById("videoMode");
+const generate = document.getElementById("generate");
+const prompt = document.getElementById("prompt");
+const status = document.getElementById("status");
+const result = document.getElementById("result");
+
+imageMode.addEventListener("click", () => {
+  selectedMode = "image";
+  imageMode.classList.add("active");
+  videoMode.classList.remove("active");
+});
+
+videoMode.addEventListener("click", () => {
+  selectedMode = "video";
+  videoMode.classList.add("active");
+  imageMode.classList.remove("active");
+});
+
+generate.addEventListener("click", () => {
+
+  if (!prompt.value.trim()) {
+    status.style.display = "block";
+    status.textContent = "Please enter a prompt first.";
+    return;
+  }
+
+  status.style.display = "block";
+
+  status.textContent =
+    "Your prompt is ready. AI " +
+    selectedMode.toUpperCase() +
+    " generation is not connected yet. No external website will be opened.";
+
+  result.textContent =
+    "Prompt: " + prompt.value +
+    " | Style: " +
+    document.getElementById("style").value;
+});
+</script>
+
+</body>
+</html>
